@@ -1,0 +1,9 @@
+README.md
+pyproject.toml
+src/eidetic_ai.egg-info/PKG-INFO
+src/eidetic_ai.egg-info/SOURCES.txt
+src/eidetic_ai.egg-info/dependency_links.txt
+src/eidetic_ai.egg-info/top_level.txt
+src/inference/01_local_model_test.py
+src/qce/hc.py
+src/qce/solver.py
