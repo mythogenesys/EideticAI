@@ -1,0 +1,129 @@
+\documentclass[11pt, letterpaper]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath, amssymb, amsthm, mathtools}
+\usepackage{graphicx}
+\usepackage[style=numeric-comp, backend=biber, sorting=none]{biblatex}
+\usepackage{hyperref}
+\usepackage{algorithm, algpseudocode}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+    citecolor=blue,
+}
+
+\addbibresource{references.bib}
+
+% --- Custom Theorem Environments ---
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{hypothesis}[theorem]{Hypothesis}
+
+% --- Title ---
+\title{\textbf{Eidetic AI: A Framework for Lifelong Machine Pedagogy via Quantum-Inspired Conceptual Inference and Co-Evolutionary Curriculum Generation}}
+\author{Your Name \\ Massachusetts Institute of Technology}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+\noindent We introduce \textbf{Eidetic AI}, a new architectural paradigm for artificial tutors that fundamentally transcends the limitations of autoregressive models. We posit that true machine pedagogy requires not just knowledge retrieval, but conceptual synthesis. Our framework achieves this through three core innovations. First, we formalize the \textbf{Quantum Conceptual Engine (QCE)}, an inference mechanism that generates explanations by solving for the ground state of a dynamically constructed conceptual Hamiltonian, ensuring maximal coherence. Second, we propose \textbf{ASCENDANT-K}, a multi-agent reinforcement learning (MARL) framework where teacher and critic agents co-evolve toward a Nash Equilibrium, producing curricula of unparalleled robustness. This process is fueled by a novel pipeline that distills confusion patterns from large-scale data into compact, adversarial student models. Third, we architect a \textbf{Hierarchical Associative Memory Graph} with Hebbian update rules, enabling lifelong learning and adaptation over timescales of years without catastrophic forgetting. We will validate this framework through a rigorous suite of automated simulations and a capstone human randomized controlled trial, demonstrating superior pedagogical utility, transfer learning, and computational efficiency against state-of-the-art baselines.
+\end{abstract}
+
+\tableofcontents
+\newpage
+
+\section{Introduction}
+The dominant paradigm in artificial intelligence, particularly in large language models (LLMs), is autoregressive prediction \cite{vaswani2017attention}. While extraordinarily powerful for tasks involving sequence completion and pattern matching, this approach is fundamentally one of mimicry, not synthesis. In the domain of education, this results in AI tutors that are sophisticated information retrievers and paraphrasers, yet lack the genuine pedagogical insight required to invent a truly novel analogy or re-frame a concept from first principles. They find paths on an existing map; they do not draw new ones.
+
+This thesis introduces \textbf{Eidetic AI}, a framework designed to move beyond mimicry towards true machine pedagogy. Our approach is founded on the premise that a pedagogical explanation is not a sequence of high-probability tokens, but rather a coherent, self-consistent constellation of concepts. We formalize this notion by recasting explanation generation as a problem in quantum-inspired optimization. The core of our system, the Quantum Conceptual Engine (QCE), formulates an explanation as the ground state of a conceptual Hamiltonian, an energy function whose minimization corresponds to maximizing conceptual coherence \cite{hopfield1982neural, feynman1982simulating}.
+
+This inference mechanism is situated within a broader ecosystem designed for robust and lifelong learning. The ASCENDANT-K framework leverages co-evolutionary dynamics from multi-agent reinforcement learning \cite{sutton2018reinforcement} to harden curricula against student misconceptions. Finally, a hierarchical associative memory graph with Hebbian update rules provides a substrate for long-term adaptation and personalization. This document lays out the full theoretical foundation for this new paradigm.
+
+\section{Core Intellectual Contributions}
+This thesis will establish and formally validate the following intellectual contributions:
+\begin{enumerate}
+    \item \textbf{A Formalism for Pedagogical Coherence:} We will define and operationalize pedagogical coherence as the ground state energy of a higher-order "conceptual Hamiltonian," providing a novel, optimizable objective for explanation generation that is distinct from token-level log-likelihood.
+    \item \textbf{An Approximation Guarantee for the QCE Solver:} We will prove that for our chosen class of sparse Hamiltonians, our continuous relaxation and projected gradient solver achieves a provable $\epsilon$-approximation guarantee, bounding the gap between the found solution and the true optimal explanation.
+    \item \textbf{A Proof of Convergence for Curriculum Co-evolution:} We will formally characterize the ASCENDANT-K framework as a general-sum game and prove the conditions under which our population-based training algorithm converges to a stable Nash Equilibrium, representing a robust and vetted curriculum.
+\end{enumerate}
+
+\section{Formal Problem Statement}
+
+\begin{definition}[Quantum-Inspired Conceptual Inference]
+Given a student's latent knowledge state $s \in \mathcal{S}$ and a universe of concepts $\mathcal{C} = \{c_1, \dots, c_N\}$, construct a higher-order energy function, the conceptual Hamiltonian $H(x; s, \mathcal{C})$, where $x \in \{0, 1\}^N$ is a binary vector representing an explanation. The problem is to find the ground state $x^* = \arg\min_{x} H(x; s, \mathcal{C})$, which corresponds to the most pedagogically coherent explanation.
+\end{definition}
+
+\begin{hypothesis}[QCE Superiority]
+For a fixed computational budget, explanations derived from the QCE's ground state will yield a $>20\%$ increase in measured conceptual coherence and a statistically significant improvement in simulated student learning gain (Normalized Learning Gain, Cohen’s $d \ge 0.3$, $p < 0.05$) compared to explanations from state-of-the-art autoregressive LLMs with Retrieval-Augmented Generation.
+\end{hypothesis}
+
+\begin{definition}[Co-Evolutionary Curriculum Generation]
+Given a teacher agent $T_\theta$ and an adversarial critic agent $S_\psi$ distilled from real-world student error patterns, the problem is to find a Nash Equilibrium $(\theta^*, \psi^*)$ in the two-player general-sum game defined by the ASCENDANT-K objective. This equilibrium corresponds to a curriculum that minimizes expected future student confusion.
+\end{definition}
+
+\begin{hypothesis}[ASCENDANT-K Efficiency]
+Curricula generated by the ASCENDANT-K framework will enable simulated student agents to achieve concept mastery with a $>25\%$ reduction in Time-to-Mastery (TTM) and a $>15\%$ increase in long-term retention scores compared to both expert-designed syllabi and state-of-the-art adaptive tutoring baselines.
+\end{hypothesis}
+
+\begin{definition}[Lifelong Pedagogical Memory]
+The problem is to design a memory architecture $\mathcal{M}$ that can store, retrieve, and refine personalized pedagogical strategies over long-term interactions (simulated months to years) while demonstrating effective zero-shot transfer to novel but related conceptual domains without catastrophic forgetting.
+\end{definition}
+
+\begin{hypothesis}[Memory Graph Robustness]
+A hierarchical associative memory graph with Hebbian updates will maintain $>95\%$ efficacy on previously mastered personalized teaching strategies after a simulated year of interaction and demonstrate a $>50\%$ improvement in zero-shot transfer performance compared to standard RAG pipelines.
+\end{hypothesis}
+
+\section{Mathematical Framework}
+
+\subsection{The Quantum Conceptual Engine (QCE)}
+The core of our inference model is the conceptual Hamiltonian, a high-order polynomial over binary variables $x_i \in \{0, 1\}$ representing the inclusion of concept $c_i$.
+\begin{equation}
+H(x;s) = \underbrace{\sum_{i=1}^N a_i(s) x_i}_{\text{Intrinsic Utility}} + \underbrace{\sum_{i<j} b_{ij}(s) x_i x_j}_{\text{Pairwise Interaction}} + \underbrace{\sum_{i<j<k} T_{ijk}(s) x_i x_j x_k}_{\text{Higher-Order Coherence}} + \dots
+\label{eq:hamiltonian}
+\end{equation}
+The coefficients $a_i, b_{ij}, T_{ijk}$ are themselves outputs of a learned \textbf{Hamiltonian Constructor Network}, $M_\phi(s, \mathcal{C})$, which maps the student state and concept space to the energy landscape. Inference becomes the optimization problem:
+\begin{equation}
+x^* = \arg\min_{x \in \{0, 1\}^N} H(x;s)
+\end{equation}
+This is a Quadratic Unconstrained Binary Optimization (QUBO) problem, which is NP-hard. We will approach its solution via high-performance approximate solvers.
+
+\subsection{The ASCENDANT-K MARL Framework}
+We model curriculum generation as a two-player, general-sum game between a teacher agent $T_\theta$ with policy $\pi_T(a|s,c)$ and a critic agent $S_\psi$ with policy $\pi_S(\delta|s,a)$. The teacher's objective is to maximize a reward function that balances pedagogical effectiveness with robustness:
+\begin{equation}
+\max_{\theta} \mathbb{E}_{s,c \sim \mathcal{D}} \left[ R_{\text{learn}}(s, a) - \lambda R_{\text{fragility}}(s, a, \delta) \right]
+\end{equation}
+where $a = T_\theta(s,c)$ is the explanation, $\delta = S_\psi(s,a)$ is the critic's identified failure mode, $R_{\text{learn}}$ is the measured improvement in a simulated student's state, and $R_{\text{fragility}}$ is a penalty proportional to the severity of the critic's finding.
+
+\subsection{Hierarchical Associative Memory}
+The memory is a directed, weighted graph $\mathcal{G} = (\mathcal{V}, \mathcal{E}, W)$, where vertices $\mathcal{V}$ are concepts and edges $\mathcal{E}$ represent relationships with weights $W$. After a successful pedagogical interaction (utility $U > \tau$), the weights between activated concepts $c_i, c_j$ are potentiated via a Hebbian-like update rule:
+\begin{equation}
+\Delta w_{ij} \propto \eta \cdot U \cdot (\text{activation}(c_i) \cdot \text{activation}(c_j))
+\end{equation}
+where $\eta$ is a learning rate. This strengthens associations that lead to positive learning outcomes, creating a self-organizing knowledge structure.
+
+\section{Theoretical Roadmap}
+This thesis will deliver the following formal results, forming the theoretical bedrock of the Eidetic AI framework.
+
+\begin{theorem}[QCE Solver Approximation Guarantee]
+Let $H(x)$ be a $k$-sparse Hamiltonian (at most $k$ non-zero entries per column of the quadratic interaction matrix). For the continuous relaxation $H(\tilde{x})$ where $\tilde{x} \in [0,1]^N$, the solution $\tilde{x}^*$ found by our projected gradient solver after $T$ iterations is guaranteed to be within a bounded distance of the true integer ground state $x^*$, such that $H(\text{round}(\tilde{x}^*)) - H(x^*) \le \epsilon(N, k, T)$.
+\end{theorem}
+
+\begin{proposition}[ASCENDANT-K Convergence]
+The population-based training algorithm for the ASCENDANT-K game, where teacher and critic policies are sampled from evolving distributions, is guaranteed to converge to a correlated equilibrium. Under conditions of sufficient exploration and a concave reward landscape, this equilibrium approaches a Nash Equilibrium of the underlying game.
+\end{proposition}
+
+\begin{lemma}[Memory Graph Stability]
+The Hebbian update rule with a weight decay term ensures that the total weight of the memory graph remains bounded, preventing runaway potentiation and ensuring stable long-term learning dynamics.
+\end{lemma}
+
+\printbibliography
+
+\end{document}

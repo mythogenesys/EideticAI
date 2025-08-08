@@ -1,0 +1,8 @@
+\contentsline {section}{\numberline {1}Introduction}{2}{section.1}%
+\contentsline {section}{\numberline {2}Core Intellectual Contributions}{2}{section.2}%
+\contentsline {section}{\numberline {3}Formal Problem Statement}{2}{section.3}%
+\contentsline {section}{\numberline {4}Mathematical Framework}{3}{section.4}%
+\contentsline {subsection}{\numberline {4.1}The Quantum Conceptual Engine (QCE)}{3}{subsection.4.1}%
+\contentsline {subsection}{\numberline {4.2}The ASCENDANT-K MARL Framework}{4}{subsection.4.2}%
+\contentsline {subsection}{\numberline {4.3}Hierarchical Associative Memory}{4}{subsection.4.3}%
+\contentsline {section}{\numberline {5}Theoretical Roadmap}{4}{section.5}%
