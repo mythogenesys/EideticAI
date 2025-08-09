@@ -1,75 +1,66 @@
-import numpy as np
-import random
-import math
+import torch
+import torch.nn.functional as F
 
-class SimulatedAnnealingSolver:
+class ContinuousRelaxationSolver:
     """
-    A simple QUBO solver using Simulated Annealing to find the ground state
-    of a conceptual Hamiltonian.
+    Solves for the QCE ground state by optimizing a continuous relaxation
+    of the Hamiltonian energy function using gradient descent.
+    
+    This is a more principled and efficient approach than heuristic search.
     """
-    def __init__(self, a: np.ndarray, b: np.ndarray):
+    def __init__(self, a: torch.Tensor, b: torch.Tensor, steps=100, lr=0.1):
         """
-        Initializes the solver with Hamiltonian coefficients.
+        Initializes the solver with Hamiltonian coefficients as Tensors.
         Args:
-            a (np.ndarray): Linear coefficients (vector). Shape (N,).
-            b (np.ndarray): Quadratic coefficients (matrix). Shape (N, N).
+            a (torch.Tensor): Linear coefficients. Shape (N,).
+            b (torch.Tensor): Quadratic coefficients. Shape (N, N).
+            steps (int): Number of optimization steps.
+            lr (float): Learning rate for the gradient descent.
         """
         self.a = a
         self.b = b
         self.num_concepts = len(a)
+        self.steps = steps
+        self.lr = lr
         if self.num_concepts == 0:
             raise ValueError("Cannot solve for an empty set of concepts.")
 
-    def _calculate_energy(self, x: np.ndarray) -> float:
-        """Calculates the energy H(x) = x^T * B * x + a^T * x"""
-        linear_term = np.dot(self.a, x)
-        # Note: 0.5 * x.T * B * x is for the unique pairs. Since B is symmetric
-        # with zero diagonal, x.T*B*x counts each pair twice.
-        quadratic_term = 0.5 * np.dot(x.T, np.dot(self.b, x))
+    def _calculate_energy(self, x_relaxed: torch.Tensor) -> torch.Tensor:
+        """Calculates the relaxed energy H(x) = 0.5*x^T*B*x + a^T*x"""
+        # We use torch.einsum for efficient, clear tensor contractions.
+        # 'i,ij,j->' computes the full quadratic term x.T * B * x
+        quadratic_term = 0.5 * torch.einsum('i,ij,j->', x_relaxed, self.b, x_relaxed)
+        linear_term = torch.dot(self.a, x_relaxed)
         return linear_term + quadratic_term
 
-    def solve(self, initial_temp=1.0, final_temp=0.01, alpha=0.995, steps_per_temp=100):
+    def solve(self) -> torch.Tensor:
         """
-        Runs the simulated annealing algorithm.
-
-        Args:
-            initial_temp (float): Starting temperature.
-            final_temp (float): Ending temperature.
-            alpha (float): Cooling rate (multiplicative factor).
-            steps_per_temp (int): Number of iterations at each temperature.
+        Runs the gradient-based optimization.
 
         Returns:
-            np.ndarray: The binary vector x representing the lowest energy state found.
+            torch.Tensor: The binary vector x representing the found low-energy state.
         """
-        # Start with a random configuration
-        current_x = np.random.randint(2, size=self.num_concepts)
-        current_energy = self._calculate_energy(current_x)
+        # Start with a random continuous configuration between 0 and 1.
+        # This tensor requires gradients so we can optimize it.
+        x_relaxed = torch.rand(self.num_concepts, requires_grad=True)
         
-        best_x = np.copy(current_x)
-        best_energy = current_energy
-        
-        temp = initial_temp
+        # Use Adam, a robust gradient-based optimizer.
+        optimizer = torch.optim.Adam([x_relaxed], lr=self.lr)
 
-        while temp > final_temp:
-            for _ in range(steps_per_temp):
-                # Propose a new state by flipping a random bit
-                proposal_x = np.copy(current_x)
-                flip_index = random.randint(0, self.num_concepts - 1)
-                proposal_x[flip_index] = 1 - proposal_x[flip_index]
-                
-                proposal_energy = self._calculate_energy(proposal_x)
-                
-                delta_energy = proposal_energy - current_energy
-                
-                # Acceptance condition
-                if delta_energy < 0 or random.random() < math.exp(-delta_energy / temp):
-                    current_x = np.copy(proposal_x)
-                    current_energy = proposal_energy
-                    
-                    if current_energy < best_energy:
-                        best_x = np.copy(current_x)
-                        best_energy = current_energy
+        for _ in range(self.steps):
+            optimizer.zero_grad()
             
-            temp *= alpha
-            
-        return best_x
+            # Clamp the values to the [0, 1] box constraint after each step
+            with torch.no_grad():
+                x_relaxed.data.clamp_(0, 1)
+
+            energy = self._calculate_energy(x_relaxed)
+            energy.backward()
+            optimizer.step()
+
+        # Final cleanup and discretization
+        final_x = x_relaxed.detach()
+        final_x.clamp_(0, 1)
+        
+        # Discretize the final continuous solution to a binary vector.
+        return (final_x > 0.5).float()
