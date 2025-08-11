@@ -1,9 +1,6 @@
 import sys
 import os
 
-# --- Robust Path Setup ---
-# This ensures the script can find the 'eidetic_ai' package
-# no matter where the script is run from.
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 if project_root not in sys.path:
     sys.path.insert(0, project_root)
@@ -13,17 +10,14 @@ import time
 import torch
 import numpy as np
 
-# --- Local Imports ---
 from mlx_lm import load, generate
 from sentence_transformers import SentenceTransformer
-# Note the corrected absolute import path from the 'eidetic_ai' package
 from src.qce.hc import HamiltonianConstructor
 from src.qce.solver import SimulatedAnnealingSolver
 
-# ... rest of the file
 MODEL_PATH = "./Meta-Llama-3-8B-Instruct-4bit"
 CONCEPT_SPACE_PATH = "data/concept_spaces/physics_kinematics.json"
-EMBEDDING_MODEL_NAME = 'all-MiniLM-L6-v2' # A small, fast, high-quality model
+EMBEDDING_MODEL_NAME = 'all-MiniLM-L6-v2' 
 
 def run_qce_pipeline(user_prompt: str):
     """
@@ -33,7 +27,6 @@ def run_qce_pipeline(user_prompt: str):
     print(f"User Prompt: '{user_prompt}'")
     print("-" * 40)
 
-    # === Stage 1: LLM-based Concept Identification ===
     print("Stage 1: Identifying relevant concepts with LLM...")
     llm_model, tokenizer = load(MODEL_PATH)
     
@@ -59,7 +52,6 @@ Available concepts: {all_concepts_str}<|eot_id|><|start_header_id|>user<|end_hea
     print(f"Identified {len(relevant_concepts)} concepts: {relevant_concepts}")
     print("-" * 40)
 
-    # === Stage 2: Embedding Concepts ===
     print("Stage 2: Generating concept embeddings...")
     embedding_model = SentenceTransformer(EMBEDDING_MODEL_NAME)
     concept_embeddings = embedding_model.encode(relevant_concepts, convert_to_tensor=True)
@@ -68,16 +60,13 @@ Available concepts: {all_concepts_str}<|eot_id|><|start_header_id|>user<|end_hea
     print(f"Embeddings created with dimension {embedding_dim}.")
     print("-" * 40)
 
-    # === Stage 3: Hamiltonian Construction ===
     print("Stage 3: Constructing Hamiltonian with (random) HC...")
-    # For this prototype, HC is initialized with random weights.
     hc_model = HamiltonianConstructor(embedding_dim=embedding_dim, num_concepts=num_concepts)
     with torch.no_grad():
-        hamiltonian_coeffs = hc_model(concept_embeddings.to('cpu')) # Ensure tensor is on CPU
+        hamiltonian_coeffs = hc_model(concept_embeddings.to('cpu'))
     print("Hamiltonian coefficients a and b generated.")
     print("-" * 40)
 
-    # === Stage 4: QCE Solver ===
     print("Stage 4: Solving for ground state with Simulated Annealing...")
     solver = SimulatedAnnealingSolver(
         a=hamiltonian_coeffs['a'].numpy(),
@@ -97,7 +86,6 @@ Available concepts: {all_concepts_str}<|eot_id|><|start_header_id|>user<|end_hea
     print(f"Winning concepts (ground state): {winning_concepts}")
     print("-" * 40)
 
-    # === Stage 5: LLM-based Final Synthesis ===
     print("Stage 5: Synthesizing final explanation with LLM...")
     winning_concepts_str = ", ".join(winning_concepts)
     synthesis_prompt = f"""
@@ -114,6 +102,5 @@ Concepts to use: {winning_concepts_str}<|eot_id|><|start_header_id|>user<|end_he
 
 
 if __name__ == "__main__":
-    # The prompt that drives the entire pipeline
     prompt = "What is the difference between velocity and acceleration, and how are they related?"
     run_qce_pipeline(prompt)

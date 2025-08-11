@@ -10,7 +10,6 @@ def verify_environment():
     print(f"Python Version: {platform.python_version()}")
     print("-" * 35)
 
-    # Verify PyTorch MPS (Metal Performance Shaders) for Apple Silicon
     try:
         if torch.backends.mps.is_available():
             print("PyTorch Backend: \033[92mMPS (Metal) is available.\033[0m")
@@ -26,7 +25,6 @@ def verify_environment():
 
     print("-" * 35)
 
-    # Verify Apple MLX Framework
     try:
         mx.set_default_device(mx.gpu)
         a = mx.array([1, 2, 3])

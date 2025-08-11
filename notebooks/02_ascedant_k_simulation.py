@@ -12,16 +12,14 @@ project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 if project_root not in sys.path:
     sys.path.insert(0, project_root)
 
-# --- Local Imports (Reforged) ---
 from src.qce.hc import DifferentiablePolicy
 from eidetic_ai.memory.graph import AssociativeMemoryGraph
 
-# --- Configuration ---
 CONCEPT_SPACE_PATH = "data/concept_spaces/physics_kinematics.json"
 EMBEDDING_MODEL_NAME = 'all-MiniLM-L6-v2'
 NUM_EPOCHS = 200
 LEARNING_RATE = 0.001
-L1_LAMBDA = 0.005 # A smaller sparsity penalty to encourage initial exploration
+L1_LAMBDA = 0.005
 
 def run_principled_training():
     """

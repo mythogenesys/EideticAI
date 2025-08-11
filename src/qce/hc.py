@@ -1,8 +1,6 @@
 import torch
 import torch.nn as nn
 
-# The old HamiltonianConstructor can be deleted or kept for historical reference.
-# This DifferentiablePolicy is the new, correct model.
 
 class DifferentiablePolicy(nn.Module):
     """
